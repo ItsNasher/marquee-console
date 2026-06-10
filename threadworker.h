@@ -1,35 +1,37 @@
 #pragma once
 
-#include <mutex>
 #include <thread>
 #include <semaphore>
-#include <condition_variable>
-
+#include <string>
+#include <atomic>
 
 class ThreadWorker {
-public:
-    inline static const int N_THREADS = 2;              // Declared here so it can be used below
-
 private:
-    inline static const int DELAY = 100;                // Sleep duration
-    int id;
-    int n_turns;
+    // Controls shared access to the console (std::cout)
+    inline static const int MAX_ACCESS = 1;             
+    inline static std::counting_semaphore<1> console_semaphore{MAX_ACCESS};  
 
-    // Variables for run_sync()
-    inline static int turn = 1;                         // Tracks the current thread
-    inline static std::mutex turn_mutex;                // Ensures a turn is done by one thread at a time 
-    inline static std::condition_variable turn_cv;      // Allows thread to wait until its turn
-    int counter = 1;                                    // Counts the number of turns of a thread
+    // Shared state variables
+    inline static std::atomic<bool> isRunning{true};
+    inline static std::string currentInput = "";
+    inline static std::string lastCommand = "";
 
-    // Variables for run_shared()
-    inline static const int MAX_ACCESS = 1;             // Max num of threads that can access the shared counter
-    inline static std::counting_semaphore<N_THREADS> semaphore{MAX_ACCESS};  // Controls shared counter access
-    inline static std::atomic<int> shared_counter = 1;  // Counter shared by all threads
+    // UI positioning constants
+    inline static const int OUTPUT_ROW = 22;
+    inline static const int INPUT_ROW = 23;
+
+    // Internal helper functions
+    static void setCursorPosition(int x, int y);
+    static void printPadded(const std::string& text, int width = 100);
+    static int calculateY(int x, int baseY, int amplitude);
+    static void renderInputArea();
+    static void restoreCursor();
 
 public:
-    ThreadWorker(int i, int n = 1);
+    static void showCursor();
+    static void drawStaticUI();
 
-    void run_async();
-    void run_sync();
-    void run_shared();
+    // Thread entry points
+    static void run_marquee();
+    static void run_input();
 };

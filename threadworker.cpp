@@ -89,7 +89,7 @@ void ThreadWorker::run_marquee() {
 
             console_semaphore.acquire();
             if (leaderX <= 60) {
-                setCursorPosition(leaderX, leaderY);
+                setCursorPosition(leaderX, leaderY);=
                 cout << string(leader.size(), ' ');
             }
             if (followerX >= 0 && followerX <= 60) {
@@ -110,10 +110,10 @@ void ThreadWorker::run_input() {
         if (_kbhit()) {
             char ch = _getch();
             
-            if (ch == 27) { // ESC key
+            if (ch == 27) {
                 isRunning = false;
                 break;
-            } else if (ch == '\r') { // Enter key
+            } else if (ch == '\r') {
                 if (currentInput == "exit") {
                     isRunning = false;
                     break;
@@ -121,7 +121,7 @@ void ThreadWorker::run_input() {
                 lastCommand = currentInput;
                 currentInput = "";
                 renderInputArea();
-            } else if (ch == '\b') { // Backspace key
+            } else if (ch == '\b') {
                 if (!currentInput.empty()) {
                     currentInput.pop_back();
                     renderInputArea();

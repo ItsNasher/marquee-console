@@ -1,6 +1,7 @@
 # marquee-console
 Ethan Iago D Dela Cruz S07 <br>
-semi mo marquee console
+SEMI - MO Marquee Console <br>
+Displaying multithreading, keyboard polling and moving text
 
 compile using either: <br>
 `clang++ -static -std=c++20 marquee.cpp threadworker.cpp -o marquee.exe` or <br>
